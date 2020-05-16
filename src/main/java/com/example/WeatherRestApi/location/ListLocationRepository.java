@@ -8,15 +8,15 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Repository
-public class ListLocationRepository implements LocationRepository{
-    List<Location> locationList = new ArrayList<>();
+public class ListLocationRepository implements LocationRepository {
+    private final List<Location> locationList = new ArrayList<>();
 
     @Override
     public Location add(Location location) {
-        if(locationList.contains(location)){
-            throw new IllegalArgumentException("Location already exists!");
-        }
-        locationList.add(location);
+        locationList.add(locationList.stream()
+                .filter((Location l) -> l.equals(location))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("Location already exists")));
         return location;
     }
 
@@ -27,22 +27,20 @@ public class ListLocationRepository implements LocationRepository{
 
     @Override
     public Location delete(Location location) {
-        if (locationList.contains(location)) {
-            locationList.remove(location);
-            return location;
-        }else {
-            throw new NoSuchElementException("Nothing to delete");
-        }
+        locationList.remove(locationList.stream()
+                .filter((Location l) -> l.equals(location))
+                .findAny()
+                .orElseThrow(() -> new NoSuchElementException("Nothing to delete")));
+        return location;
     }
 
     @Override
     public Location update(UUID toUpdate, Location updatedData) {
-        for (Location location:locationList){
-            if(location.getId().equals(toUpdate)){
-                locationList.add(locationList.indexOf(location),updatedData);
-                return updatedData;
-            }
-        }
-        throw new NoSuchElementException("No location with such ID");
+        Location item = locationList.stream()
+                .filter((Location l) -> l.getId().equals(toUpdate))
+                .findAny()
+                .orElseThrow(() -> new NoSuchElementException("Location do not exist"));
+        locationList.add(item);
+        return item;
     }
 }

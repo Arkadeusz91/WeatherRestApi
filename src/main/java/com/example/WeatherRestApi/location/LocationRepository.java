@@ -5,7 +5,10 @@ import java.util.UUID;
 
 public interface LocationRepository {
     Location add(Location location);
+
     List<Location> getAll();
+
     Location delete(Location location);
+
     Location update(UUID toUpdate, Location updatedData);
 }
