@@ -11,7 +11,7 @@ public class Location {
     private double longitude;
     @Min(-90)
     @Max(90)
-    private double lattitude;
+    private double latitude;
     @NotNull
     @NotBlank
     private String city;
@@ -26,7 +26,7 @@ public class Location {
     public Location(UUID id, double longitude, double lattitude, String city, String region, String country) {
         this.id = id;
         this.longitude = longitude;
-        this.lattitude = lattitude;
+        this.latitude = lattitude;
         this.city = city;
         this.region = region;
         this.country = country;
@@ -49,11 +49,11 @@ public class Location {
     }
 
     public double getLattitude() {
-        return lattitude;
+        return latitude;
     }
 
     public void setLattitude(double lattitude) {
-        this.lattitude = lattitude;
+        this.latitude = lattitude;
     }
 
     public String getCity() {

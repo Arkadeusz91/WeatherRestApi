@@ -8,5 +8,4 @@ public interface LocationRepository {
     List<Location> getAll();
     Location delete(Location location);
     Location update(UUID toUpdate, Location updatedData);
-    
 }
