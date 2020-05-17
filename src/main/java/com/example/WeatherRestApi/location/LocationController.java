@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RequestMapping("/location")
@@ -28,12 +29,17 @@ public class LocationController {
     }
 
     @PutMapping("/update/{id}")
-    public Location update(@Valid @RequestBody Location location, @Valid @PathVariable("id") long id) {
+    public Location update(@Valid @RequestBody Location location, @Valid @PathVariable("id") String id) {
         return service.update(id, location);
     }
 
     @DeleteMapping("/delete")
     public Location delete(@Valid @RequestBody Location location) {
         return service.delete(location);
+    }
+
+    @GetMapping("/find")
+    public List<Location> findBy(@RequestParam Map<String,String> params){
+        return service.findBy(params);
     }
 }

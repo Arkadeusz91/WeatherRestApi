@@ -1,6 +1,9 @@
 package com.example.WeatherRestApi.location;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.*;
 import java.util.Objects;
@@ -9,18 +12,25 @@ import java.util.UUID;
 @Entity
 public class Location {
     @Id
-    private long id;
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    private String id;
+
     @Min(-180)
     @Max(180)
     private double longitude;
+
     @Min(-90)
     @Max(90)
     private double latitude;
+
     @NotNull
     @NotBlank
     @NotEmpty
     private String city;
+
     private String region;
+
     @NotNull
     @NotBlank
     @NotEmpty
@@ -29,20 +39,11 @@ public class Location {
     public Location() {
     }
 
-    public Location(long id, double longitude, double lattitude, String city, String region, String country) {
-        this.id = id;
-        this.longitude = longitude;
-        this.latitude = lattitude;
-        this.city = city;
-        this.region = region;
-        this.country = country;
-    }
-
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

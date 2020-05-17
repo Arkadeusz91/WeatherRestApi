@@ -1,11 +1,10 @@
 package com.example.WeatherRestApi.location;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,32 +23,9 @@ public class LocationService implements LocationServiceAPI {
     }
 
     @Override
-    public Location findById(long id) {
-        return locationRepository.findAll().stream()
-                .filter((Location l) -> l.getId()==id)
-                .findAny()
-                .orElseThrow(() -> new NoSuchElementException("No location with this ID"));
-    }
-
-    @Override
-    public List<Location> findByCity(String name) {
-        return locationRepository.findAll().stream()
-                .filter((Location l) -> l.getCity().equals(name))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Location> findByRegion(String name) {
-        return locationRepository.findAll().stream()
-                .filter((Location l) -> l.getRegion().equals(name))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Location> findByCountry(String name) {
-        return locationRepository.findAll().stream()
-                .filter((Location l) -> l.getCountry().equals(name))
-                .collect(Collectors.toList());
+    public Location findById(String id) {
+        return locationRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("No element with this ID"));
     }
 
 
@@ -65,15 +41,41 @@ public class LocationService implements LocationServiceAPI {
     }
 
     @Override
-    public Location update(long id, Location location) {
-        return null;
+    public Location update(String id, Location location) {
+        if (locationRepository.existsById(id)) {
+            location.setId(id);
+            Location toUpdate = locationRepository.getOne(id);
+            toUpdate = location;
+            locationRepository.save(toUpdate);
+            return toUpdate;
+        }
+        throw new NoSuchElementException("Location not in database");
     }
 
     @Override
-    public List<Location> findByCoordinates(double longitude, double latitude) {
-        return locationRepository.findAll().stream()
-                .filter((Location l) -> l.getLongitude() == longitude)
-                .filter((Location l) -> l.getLattitude() == latitude)
-                .collect(Collectors.toList());
+    public List<Location> findBy(Map<String, String> params) {
+        Set<Location> resultSet = new HashSet<>();
+        if (params.containsKey("id")) {
+            locationRepository.findById(params.get("id"))
+                    .ifPresent(l -> resultSet.add(l));
+        }
+
+        if (params.containsKey("city")) {
+            resultSet.addAll(locationRepository.findByCity(params.get("city")));
+        }
+        if (params.containsKey("region")) {
+            resultSet.addAll(locationRepository.findByRegion(params.get("region")));
+        }
+        if (params.containsKey("country")) {
+            resultSet.addAll(locationRepository.findByCountry(params.get("country")));
+        }
+        if (params.containsKey("longitude") && params.containsKey("latitude")) {
+            resultSet.add(locationRepository
+                    .findByLatitudeAndLongitude(Double.parseDouble(params.get("latitude"))
+                            , Double.parseDouble(params.get("longitude")))
+                    .get());
+        }
+        List<Location> result = new ArrayList<>(resultSet);
+        return result;
     }
 }

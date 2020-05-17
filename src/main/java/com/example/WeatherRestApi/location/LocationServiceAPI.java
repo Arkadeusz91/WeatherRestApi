@@ -1,6 +1,7 @@
 package com.example.WeatherRestApi.location;
 
 import java.util.List;
+import java.util.Map;
 
 public interface LocationServiceAPI {
     List<Location> get();
@@ -9,15 +10,9 @@ public interface LocationServiceAPI {
 
     Location delete(Location location);
 
-    Location update(long id, Location location);
+    Location update(String id, Location location);
 
-    Location findById(long id);
+    Location findById(String id);
 
-    List<Location> findByCity(String name);
-
-    List<Location> findByRegion(String name);
-
-    List<Location> findByCountry(String name);
-
-    List<Location> findByCoordinates(double longitude, double latitude);
+    List<Location> findBy(Map<String, String> params);
 }
