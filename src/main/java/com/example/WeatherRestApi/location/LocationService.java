@@ -11,43 +11,43 @@ import java.util.stream.Collectors;
 @Service
 public class LocationService implements LocationServiceAPI {
 
-    private final LocationRepository locationRepository;
+    private final LocationDbRepository locationRepository;
 
     @Autowired
-    public LocationService(LocationRepository locationRepository) {
+    public LocationService(LocationDbRepository locationRepository) {
         this.locationRepository = locationRepository;
     }
 
     @Override
     public List<Location> get() {
-        return locationRepository.getAll();
+        return locationRepository.findAll();
     }
 
     @Override
-    public Location findById(UUID id) {
-        return locationRepository.getAll().stream()
-                .filter((Location l) -> l.getId().equals(id))
+    public Location findById(long id) {
+        return locationRepository.findAll().stream()
+                .filter((Location l) -> l.getId()==id)
                 .findAny()
                 .orElseThrow(() -> new NoSuchElementException("No location with this ID"));
     }
 
     @Override
     public List<Location> findByCity(String name) {
-        return locationRepository.getAll().stream()
+        return locationRepository.findAll().stream()
                 .filter((Location l) -> l.getCity().equals(name))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Location> findByRegion(String name) {
-        return locationRepository.getAll().stream()
+        return locationRepository.findAll().stream()
                 .filter((Location l) -> l.getRegion().equals(name))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Location> findByCountry(String name) {
-        return locationRepository.getAll().stream()
+        return locationRepository.findAll().stream()
                 .filter((Location l) -> l.getCountry().equals(name))
                 .collect(Collectors.toList());
     }
@@ -55,22 +55,23 @@ public class LocationService implements LocationServiceAPI {
 
     @Override
     public Location add(Location location) {
-        return locationRepository.add(location);
+        return locationRepository.save(location);
     }
 
     @Override
     public Location delete(Location location) {
-        return locationRepository.delete(location);
+        locationRepository.delete(location);
+        return location;
     }
 
     @Override
-    public Location update(UUID id, Location location) {
-        return locationRepository.update(id, location);
+    public Location update(long id, Location location) {
+        return null;
     }
 
     @Override
     public List<Location> findByCoordinates(double longitude, double latitude) {
-        return locationRepository.getAll().stream()
+        return locationRepository.findAll().stream()
                 .filter((Location l) -> l.getLongitude() == longitude)
                 .filter((Location l) -> l.getLattitude() == latitude)
                 .collect(Collectors.toList());

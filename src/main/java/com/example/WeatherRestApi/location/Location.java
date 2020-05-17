@@ -1,12 +1,15 @@
 package com.example.WeatherRestApi.location;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.*;
 import java.util.Objects;
 import java.util.UUID;
 
+@Entity
 public class Location {
-    @Pattern(regexp = "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")
-    private UUID id;
+    @Id
+    private long id;
     @Min(-180)
     @Max(180)
     private double longitude;
@@ -26,7 +29,7 @@ public class Location {
     public Location() {
     }
 
-    public Location(UUID id, double longitude, double lattitude, String city, String region, String country) {
+    public Location(long id, double longitude, double lattitude, String city, String region, String country) {
         this.id = id;
         this.longitude = longitude;
         this.latitude = lattitude;
@@ -35,11 +38,11 @@ public class Location {
         this.country = country;
     }
 
-    public UUID getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -28,7 +28,7 @@ public class LocationController {
     }
 
     @PutMapping("/update/{id}")
-    public Location update(@Valid @RequestBody Location location, @Valid @PathVariable("id") UUID id) {
+    public Location update(@Valid @RequestBody Location location, @Valid @PathVariable("id") long id) {
         return service.update(id, location);
     }
 

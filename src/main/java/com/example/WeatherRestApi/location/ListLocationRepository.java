@@ -35,9 +35,9 @@ public class ListLocationRepository implements LocationRepository {
     }
 
     @Override
-    public Location update(UUID toUpdate, Location updatedData) {
+    public Location update(long toUpdate, Location updatedData) {
         Location item = locationList.stream()
-                .filter((Location l) -> l.getId().equals(toUpdate))
+                .filter((Location l) -> l.getId()==toUpdate)
                 .findAny()
                 .orElseThrow(() -> new NoSuchElementException("Location do not exist"));
         locationList.add(item);

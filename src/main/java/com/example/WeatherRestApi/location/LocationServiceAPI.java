@@ -1,7 +1,6 @@
 package com.example.WeatherRestApi.location;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface LocationServiceAPI {
     List<Location> get();
@@ -10,9 +9,9 @@ public interface LocationServiceAPI {
 
     Location delete(Location location);
 
-    Location update(UUID id, Location location);
+    Location update(long id, Location location);
 
-    Location findById(UUID id);
+    Location findById(long id);
 
     List<Location> findByCity(String name);
 

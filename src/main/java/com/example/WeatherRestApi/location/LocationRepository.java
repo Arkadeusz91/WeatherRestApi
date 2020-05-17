@@ -10,5 +10,5 @@ public interface LocationRepository {
 
     Location delete(Location location);
 
-    Location update(UUID toUpdate, Location updatedData);
+    Location update(long toUpdate, Location updatedData);
 }
