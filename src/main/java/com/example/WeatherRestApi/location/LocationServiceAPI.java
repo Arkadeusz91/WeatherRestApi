@@ -4,15 +4,15 @@ import java.util.List;
 import java.util.Map;
 
 public interface LocationServiceAPI {
-    List<Location> get();
+    List<LocationDTO> get();
 
-    Location add(Location location);
+    LocationDTO add(LocationDTO location);
 
-    Location delete(Location location);
+    LocationDTO delete(String id);
 
-    Location update(String id, Location location);
+    LocationDTO update(String id, LocationDTO location);
 
-    Location findById(String id);
+    LocationDTO findById(String id);
 
-    List<Location> findBy(Map<String, String> params);
+    List<LocationDTO> findBy(Map<String, String> params);
 }

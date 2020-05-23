@@ -1,38 +1,40 @@
 package com.example.WeatherRestApi.weather;
 
-import com.example.WeatherRestApi.location.Location;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.Objects;
 
-@Entity
-public class Weather {
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+public class WeatherDTO {
     private String id;
-
-    @Min(-274)
     private double temperature;
     private double pressure;
     private double humidity;
-    @NotNull
-    @Enumerated(EnumType.STRING)
     private WindDirection windDirection;
     private double windSpeed;
-    @Pattern(regexp = "^([0]?[1-9]|[1|2][0-9]|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-]([0-9]{4}|[0-9]{2})$")
-    @NotNull
-    @NotBlank
     private String date;
+    private String locationId;
 
-    @ManyToOne
-    @NotNull
-    private Location location;
+    public WeatherDTO() {
+    }
+
+    public WeatherDTO(String id, double temperature, double pressure, double humidity,
+                      WindDirection windDirection, double windSpeed, String date, String locationId) {
+        this.id = id;
+        this.temperature = temperature;
+        this.pressure = pressure;
+        this.humidity = humidity;
+        this.windDirection = windDirection;
+        this.windSpeed = windSpeed;
+        this.date = date;
+        this.locationId = locationId;
+    }
 
     public String getId() {
         return id;
@@ -90,31 +92,11 @@ public class Weather {
         this.date = date;
     }
 
-    public Location getLocation() {
-        return location;
+    public String getLocationId() {
+        return locationId;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Weather weather = (Weather) o;
-        return Double.compare(weather.temperature, temperature) == 0 &&
-                Double.compare(weather.pressure, pressure) == 0 &&
-                Double.compare(weather.humidity, humidity) == 0 &&
-                Double.compare(weather.windSpeed, windSpeed) == 0 &&
-                Objects.equals(id, weather.id) &&
-                windDirection == weather.windDirection &&
-                Objects.equals(date, weather.date) &&
-                Objects.equals(location, weather.location);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, temperature, pressure, humidity, windDirection, windSpeed, date, location);
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
     }
 }

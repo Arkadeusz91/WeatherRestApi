@@ -8,9 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 public class Location {
@@ -40,7 +40,7 @@ public class Location {
     private String country;
 
     @OneToMany(mappedBy = "location")
-    private List<Weather> weather;
+    private List<Weather> weather = new ArrayList<>();
 
     public Location() {
     }
@@ -59,14 +59,6 @@ public class Location {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
-    }
-
-    public double getLattitude() {
-        return latitude;
-    }
-
-    public void setLattitude(double lattitude) {
-        this.latitude = lattitude;
     }
 
     public String getCity() {
@@ -93,6 +85,22 @@ public class Location {
         this.country = country;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public List<Weather> getWeather() {
+        return weather;
+    }
+
+    public void setWeather(List<Weather> weather) {
+        this.weather = weather;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -103,11 +111,12 @@ public class Location {
                 Objects.equals(id, location.id) &&
                 Objects.equals(city, location.city) &&
                 Objects.equals(region, location.region) &&
-                Objects.equals(country, location.country);
+                Objects.equals(country, location.country) &&
+                Objects.equals(weather, location.weather);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, longitude, latitude, city, region, country);
+        return Objects.hash(id, longitude, latitude, city, region, country, weather);
     }
 }
