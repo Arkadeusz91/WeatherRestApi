@@ -1,11 +1,14 @@
 package com.example.WeatherRestApi.location;
 
+import com.example.WeatherRestApi.weather.Weather;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -35,6 +38,9 @@ public class Location {
     @NotBlank
     @NotEmpty
     private String country;
+
+    @OneToMany(mappedBy = "location")
+    private List<Weather> weather;
 
     public Location() {
     }
