@@ -1,5 +1,6 @@
 package com.example.WeatherRestApi.weather;
 
+import com.example.WeatherRestApi.weather.openWeatherApi.OpenWeatherApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,5 +30,10 @@ public class WeatherController {
     @DeleteMapping("/{id}")
     public WeatherDTO remove(@PathVariable String id){
         return service.remove(id);
+    }
+
+    @GetMapping("/{locationName}")
+    public OpenWeatherApiResponse getLocationWeather(@PathVariable String locationName){
+        return service.getOpenWeatherApiResponse(locationName);
     }
 }

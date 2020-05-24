@@ -2,6 +2,8 @@ package com.example.WeatherRestApi.weather;
 
 import com.example.WeatherRestApi.location.Location;
 import com.example.WeatherRestApi.location.LocationDbRepository;
+import com.example.WeatherRestApi.weather.openWeatherApi.OpenWeatherApiExecutor;
+import com.example.WeatherRestApi.weather.openWeatherApi.OpenWeatherApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +17,15 @@ public class WeatherService implements WeatherServiceAPI {
     private final WeatherRepository weatherRepository;
     private final LocationDbRepository locationRepository;
     private final WeatherTransformer weatherTransformer;
+    private final OpenWeatherApiExecutor openWeatherApiExecutor;
 
     @Autowired
-    public WeatherService(WeatherRepository weatherRepository, LocationDbRepository locationRepository,WeatherTransformer weatherTransformer) {
+    public WeatherService(WeatherRepository weatherRepository, LocationDbRepository locationRepository
+            ,WeatherTransformer weatherTransformer,OpenWeatherApiExecutor openWeatherApiExecutor) {
         this.weatherRepository = weatherRepository;
         this.locationRepository = locationRepository;
         this.weatherTransformer = weatherTransformer;
+        this.openWeatherApiExecutor = openWeatherApiExecutor;
     }
 
     @Override
@@ -32,11 +37,9 @@ public class WeatherService implements WeatherServiceAPI {
 
     @Override
     public WeatherDTO add(WeatherDTO weather) {
-        Location location = locationRepository.findById(weather.getLocationId())
-                .orElseThrow(()->new NoSuchElementException("No entry with this ID"));
         Weather weatherFromDb = weatherRepository.save(weatherTransformer.toEntity(weather));
-        location.getWeather().add(weatherFromDb);
-        locationRepository.save(location);
+        weatherFromDb.getLocation().getWeather().add(weatherFromDb);
+        locationRepository.save(weatherFromDb.getLocation());
         return weatherTransformer.toDTO(weatherRepository.save(weatherFromDb));
     }
 
@@ -45,5 +48,10 @@ public class WeatherService implements WeatherServiceAPI {
         weatherRepository.deleteById(id);
         return weatherTransformer.toDTO(weatherRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("No entry with this ID")));
+    }
+
+    @Override
+    public OpenWeatherApiResponse getOpenWeatherApiResponse(String locationName){
+        return openWeatherApiExecutor.fetchWeather(locationName);
     }
 }

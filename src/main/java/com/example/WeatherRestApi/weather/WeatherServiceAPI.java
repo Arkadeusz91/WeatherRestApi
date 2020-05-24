@@ -1,9 +1,15 @@
 package com.example.WeatherRestApi.weather;
 
+import com.example.WeatherRestApi.weather.openWeatherApi.OpenWeatherApiResponse;
+
 import java.util.List;
 
 public interface WeatherServiceAPI {
-    public List<WeatherDTO> getAll();
-    public WeatherDTO add(WeatherDTO weather);
-    public WeatherDTO remove(String id);
+    List<WeatherDTO> getAll();
+
+    WeatherDTO add(WeatherDTO weather);
+
+    WeatherDTO remove(String id);
+
+    OpenWeatherApiResponse getOpenWeatherApiResponse(String locationName);
 }
